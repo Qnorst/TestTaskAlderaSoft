@@ -1,0 +1,1002 @@
+{
+	"info": {
+		"_postman_id": "0eeaa862-bb2d-4979-b57d-e8bdd3627ab3",
+		"name": "Тестовое задание",
+		"description": "Данная коллекция создана с целью найти эндпоинты сайта [https://journal.tinkoff.ru/](https://journal.tinkoff.ru/)\n\nТут представленны эндпоинты связанные в разделом сайта под названием \"Сообщество\".\n\nТак как Тинькофф-журнал -- это сайт, который использует csrf токен для обеспечения безопасности, а так же на этом сайте можно зарегестрироватся и стать пользователем, то для большей части представленных эндпоинтов необходимо авторизоваться, введя почту или номер телефона.\n\nАвторизация состоит из двух эндпоинтов -- Ввод и отправка почты/телефона на сервер, а затем получение, на указанные данные кода и его отправление на сервер.\n\nВсего на данном сайте есть следующие апи:\n\nSOCIAL_API_URL: \"[https://social.journal.tinkoff.ru\"](https://social.journal.tinkoff.ru\"),  \nURANIA_API_URL: \"[https://urania.journal.tinkoff.ru\"](https://urania.journal.tinkoff.ru\"),  \nMERCURY_API_URL: \"[https://core.tinkoffjournal.ru/api\"](https://core.tinkoffjournal.ru/api\"),  \nSCRIBE_API_URL: \"[https://scribe.journal.tinkoff.ru/api\"](https://scribe.journal.tinkoff.ru/api\"),  \nOPIS_CDN_URL: \"[https://opis-cdn.tinkoffjournal.ru\"](https://opis-cdn.tinkoffjournal.ru\"),",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23808320"
+	},
+	"item": [
+		{
+			"name": "Авторизация",
+			"item": [
+				{
+					"name": "Авторизация с помощью почты",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{Mail}}\",\r\n    \"point_of_contact\": \"header-login-button\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/account/login/email1/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"account",
+								"login",
+								"email1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Авторизация с помощью телефона",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"provider\": \"tinkoff_sso\",\r\n    \"point_of_contact\": \"header-login-button\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/account/login/?auth_params=phone%3D{{PhoneNumber}}%26theme%3Djournal",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"account",
+								"login",
+								""
+							],
+							"query": [
+								{
+									"key": "auth_params",
+									"value": "phone%3D{{PhoneNumber}}%26theme%3Djournal"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Подтверждение авторизации(почта)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseCookie = postman.getResponseCookie(\"x_csrf\");\r",
+									"var responseCookie1 = postman.getResponseCookie(\"sessionid\");\r",
+									"\r",
+									"responseCookie= responseCookie.value.toString();\r",
+									"responseCookie1= responseCookie1.value.toString();\r",
+									"\r",
+									"pm.collectionVariables.set(\"Csrf_token\", responseCookie);\r",
+									"pm.collectionVariables.set(\"SessionID\", responseCookie1);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"(VerificationCode)\",\r\n    \"email\": \"{{Mail}}\",\r\n    \"point_of_contact\": \"header-login-button\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/account/login/email/validate-code/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"account",
+								"login",
+								"email",
+								"validate-code",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Эндпоинты связанные с авторизацией."
+		},
+		{
+			"name": "Профиль",
+			"item": [
+				{
+					"name": "Изменение имени",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": {{$randomUserName}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v25/account/profile/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v25",
+								"account",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Изменение email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"(new email)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v25/account/change-email/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v25",
+								"account",
+								"change-email",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Подтверждение смены email(С первой почты)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"secret_code\": \"(VerificationCode)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v25/account/change-email/confirm-current-email",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v25",
+								"account",
+								"change-email",
+								"confirm-current-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Разрешение на отправку уведомлений на почту",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"allow_email_notifications\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v25/account/notifications/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v25",
+								"account",
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение информации о аккаунте",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/account/profile/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"account",
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Получение информации о профиле пользователей",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v25/profiles/{{UserID}}/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v25",
+								"profiles",
+								"{{UserID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Выход из аккаунта",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/user/",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/account/logout/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"account",
+								"logout",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Эндпоинты для работы с личным профилем."
+		},
+		{
+			"name": "Публикации",
+			"item": [
+				{
+					"name": "Форма на создание поста",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"form_id\": \"03effd1d-0f6d-4da6-99db-4eb0348652ce\",\r\n    \"answers\": [\r\n        {\r\n            \"question_title\": \"Заголовок\",\r\n            \"answer_type\": \"text\",\r\n            \"answer_value\": \"ввввв\",\r\n            \"question_name\": \"header\"\r\n        },\r\n        {\r\n            \"question_title\": \"Ваш текст\",\r\n            \"answer_type\": \"textarea\",\r\n            \"answer_value\": \"\"\r\n        },\r\n        {\r\n            \"question_title\": \"Проиллюстрируйте свою историю\",\r\n            \"answer_type\": \"image\",\r\n            \"answer_value\": \"\",\r\n            \"question_name\": \"2\"\r\n        },\r\n        {\r\n            \"question_title\": \"Оставьте свою электронную почту\",\r\n            \"answer_type\": \"email\",\r\n            \"answer_value\": \"vladimir.denisenko.03@mail.ru\"\r\n        },\r\n        {\r\n            \"question_title\": \"Поток\",\r\n            \"answer_type\": \"hidden\",\r\n            \"answer_value\": \"readers-write\",\r\n            \"question_name\": \"flow\"\r\n        },\r\n        {\r\n            \"question_title\": \"Модерация?\",\r\n            \"answer_type\": \"hidden\",\r\n            \"answer_value\": \"true\",\r\n            \"question_name\": \"moderated\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v22/form-answers/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v22",
+								"form-answers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Загрузка картинки для формы публикации",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/blank-form/?from=header_button",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v22/images/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v22",
+								"images",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Оценивание публикации",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0Njk1NjE5LCJpYXQiOjE2OTQ2MDkyMTksImp0aSI6IjZlZjNhNThlYjBiYTQzZTk5YmU4ZDk1ZDQzNGJmZDFjIiwic29jaWFsX2lkIjoyNzAzODAwLCJuYW1lIjoiXHUwNDQzXHUwNDMzXHUwNDMwXHUwNDMyXHUwNDQzXHUwNDMzXHUwNDMwMiIsImdyb3VwcyI6W119.kUzShwWQZIs797KXfTLsYgRBhZgluCgJTkfNXiyQThYxsVOI70MeBwExYhPiUR7is9hs5IAGiac_obbe3mT6AQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"method\": \"down\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v23/articles/d0ccfb84-56c5-4f1e-b436-958b274fec34/vote/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v23",
+								"articles",
+								"d0ccfb84-56c5-4f1e-b436-958b274fec34",
+								"vote",
+								""
+							],
+							"query": [
+								{
+									"key": "Cookie",
+									"value": "_ym_uid=1694268668943936657; _ym_d=1694268700; dsp_click_id=no%20dsp_click_id; ta_uid=1694268700057249596; __P__wuid=9197651ddf0dcc4c7fa2241d48d343e8; stDeIdU=c1afcd4b-1f98-44fb-8d52-87b5585f8255; popmechanic_sbjs_migrations=popmechanic_1418474375998%3D1%7C%7C%7C1471519752600%3D1%7C%7C%7C1471519752605%3D1; dco.id=ef8fd0cd-7f17-4223-b270-000040eaebb9; amp_901259=3Roqf5EOVO-zg2f7YwL2bv...1h9t6it6h.1h9t6it6h.0.0.0; userType=Visitor; utm_date_set=1694270846232; utm_source=www.google.com; dmp.id=dc0d0e4e-b75d-48b6-a56d-9d83c8486fa1; pageLanding=https%3A%2F%2Fjournal.tinkoff.ru%2F; ta_nr=return; __P__wuid_last_update_time=1694571942705; _ym_isad=1; AMCVS_A002FFD3544F6F0A0A4C98A5%40AdobeOrg=1; ta_visit_num=4; ta_visit_start_ts=1694596738702; __P__wuid_visit_id=v1%3A0000004%3A1694596738703%3A9197651ddf0dcc4c7fa2241d48d343e8; __P__wuid_visit_persistence=1694596738703; s_lastvisit_s=Less%20than%201%20day; _ym_visorc=b; vIdUid=ce14682f-5fae-4a96-8806-6c30154b1f0f; stSeStTi=1694596743667; AMCV_A002FFD3544F6F0A0A4C98A5%40AdobeOrg=-1124106680%7CMCIDTS%7C19614%7CMCMID%7C65477139360370160041629046881640588862%7CMCAAMLH-1695201550%7C6%7CMCAAMB-1695201550%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1694603950s%7CNONE%7CMCSYNCSOP%7C411-19617%7CvVersion%7C5.2.0; x_csrf=AxjZyCNNjVnAJworWozc2etaMM3UlOuShMaY1bCm2jzVAyJQCRQY8EGae9nmdlYD; sessionid=3b6xzuacxte24p8eqaoeilt8201b3si9; auth_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0Njg0NjAxLCJpYXQiOjE2OTQ1OTgyMDEsImp0aSI6IjhjMGM1NGRjYmRmOTRiNTNhOTRhMjA0NTk1N2QxM2RjIiwic29jaWFsX2lkIjoyNzAzNzQwLCJuYW1lIjoidGVzdCIsImdyb3VwcyI6W119.XJCRb7l6yIkODqPFkwXRJdXI5hJwe4hx7WrNQggzmBsll12hhouqAafaf29jRb7rqk0ccg4zoDTgbGKjOlYTfg; tmr_lvid=e97a7d8fa16ecff66ce689d3d11dc90e; tmr_lvidTS=1694268667736; mindboxDeviceUUID=4f630604-8d63-47c1-989f-77b6af6b36c4; directCrm-session=%7B%22deviceGuid%22%3A%224f630604-8d63-47c1-989f-77b6af6b36c4%22%7D; s_nr=1694598229150-Repeat; s_lastvisit=1694598229151; s_sq=tcsbank%3D%2526pid%253D%25252Fsnimayu-odnushku-stat%25252F%2526pidt%253D1%2526oid%253Dfunctionan%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DBUTTON; stLaEvTi=1694598229162",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Эндпоинты связанные с публикациями."
+		},
+		{
+			"name": "Комментарии",
+			"item": [
+				{
+					"name": "Комментарий к посту",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"CommentID\", responseData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/discuss/",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"article_uuid\": \"{{ArticleUUID}}\",\r\n    \"text\": \"Это тестовый комментарий. Не реагируйте остро и не отправляйте данный аккаунт в пучину плохой кармы:)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/new/?unsafe=false",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"new",
+								""
+							],
+							"query": [
+								{
+									"key": "unsafe",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Оценивание комментария",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0Njk1NjE5LCJpYXQiOjE2OTQ2MDkyMTksImp0aSI6IjZlZjNhNThlYjBiYTQzZTk5YmU4ZDk1ZDQzNGJmZDFjIiwic29jaWFsX2lkIjoyNzAzODAwLCJuYW1lIjoiXHUwNDQzXHUwNDMzXHUwNDMwXHUwNDMyXHUwNDQzXHUwNDMzXHUwNDMwMiIsImdyb3VwcyI6W119.kUzShwWQZIs797KXfTLsYgRBhZgluCgJTkfNXiyQThYxsVOI70MeBwExYhPiUR7is9hs5IAGiac_obbe3mT6AQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"method\": \"down\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/1548724/vote/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"1548724",
+								"vote",
+								""
+							],
+							"query": [
+								{
+									"key": "Cookie",
+									"value": "_ym_uid=1694268668943936657; _ym_d=1694268700; dsp_click_id=no%20dsp_click_id; ta_uid=1694268700057249596; __P__wuid=9197651ddf0dcc4c7fa2241d48d343e8; stDeIdU=c1afcd4b-1f98-44fb-8d52-87b5585f8255; popmechanic_sbjs_migrations=popmechanic_1418474375998%3D1%7C%7C%7C1471519752600%3D1%7C%7C%7C1471519752605%3D1; dco.id=ef8fd0cd-7f17-4223-b270-000040eaebb9; amp_901259=3Roqf5EOVO-zg2f7YwL2bv...1h9t6it6h.1h9t6it6h.0.0.0; userType=Visitor; utm_date_set=1694270846232; utm_source=www.google.com; dmp.id=dc0d0e4e-b75d-48b6-a56d-9d83c8486fa1; pageLanding=https%3A%2F%2Fjournal.tinkoff.ru%2F; ta_nr=return; __P__wuid_last_update_time=1694571942705; _ym_isad=1; AMCVS_A002FFD3544F6F0A0A4C98A5%40AdobeOrg=1; ta_visit_num=4; ta_visit_start_ts=1694596738702; __P__wuid_visit_id=v1%3A0000004%3A1694596738703%3A9197651ddf0dcc4c7fa2241d48d343e8; __P__wuid_visit_persistence=1694596738703; s_lastvisit_s=Less%20than%201%20day; _ym_visorc=b; vIdUid=ce14682f-5fae-4a96-8806-6c30154b1f0f; stSeStTi=1694596743667; AMCV_A002FFD3544F6F0A0A4C98A5%40AdobeOrg=-1124106680%7CMCIDTS%7C19614%7CMCMID%7C65477139360370160041629046881640588862%7CMCAAMLH-1695201550%7C6%7CMCAAMB-1695201550%7C6G1ynYcLPuiQxYZrsz_pkqfLG9yMXBpb2zX5dvJdYQJzPXImdj0y%7CMCOPTOUT-1694603950s%7CNONE%7CMCSYNCSOP%7C411-19617%7CvVersion%7C5.2.0; x_csrf=AxjZyCNNjVnAJworWozc2etaMM3UlOuShMaY1bCm2jzVAyJQCRQY8EGae9nmdlYD; sessionid=3b6xzuacxte24p8eqaoeilt8201b3si9; auth_token=eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk0Njg0NjAxLCJpYXQiOjE2OTQ1OTgyMDEsImp0aSI6IjhjMGM1NGRjYmRmOTRiNTNhOTRhMjA0NTk1N2QxM2RjIiwic29jaWFsX2lkIjoyNzAzNzQwLCJuYW1lIjoidGVzdCIsImdyb3VwcyI6W119.XJCRb7l6yIkODqPFkwXRJdXI5hJwe4hx7WrNQggzmBsll12hhouqAafaf29jRb7rqk0ccg4zoDTgbGKjOlYTfg; tmr_lvid=e97a7d8fa16ecff66ce689d3d11dc90e; tmr_lvidTS=1694268667736; mindboxDeviceUUID=4f630604-8d63-47c1-989f-77b6af6b36c4; directCrm-session=%7B%22deviceGuid%22%3A%224f630604-8d63-47c1-989f-77b6af6b36c4%22%7D; s_nr=1694598229150-Repeat; s_lastvisit=1694598229151; s_sq=tcsbank%3D%2526pid%253D%25252Fsnimayu-odnushku-stat%25252F%2526pidt%253D1%2526oid%253Dfunctionan%252528%252529%25257B%25257D%2526oidt%253D2%2526ot%253DBUTTON; stLaEvTi=1694598229162",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ответ на комментарий",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru/discuss/",
+								"type": "text"
+							},
+							{
+								"key": "X-Csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"user2672306, Весело даже, чего уж так неоптимистично:)\",\r\n    \"article_uuid\": \"{{ArticleUUID}}\",\r\n    \"reply_to\": 1526248\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/new/?unsafe=true",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"new",
+								""
+							],
+							"query": [
+								{
+									"key": "unsafe",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Редактирование комментария",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru",
+								"type": "text"
+							},
+							{
+								"key": "X-csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"Это это измененный тестовый комментарий. Продолжайте и не реагируйте остро и не отправляйте данный аккаунт в пучину плозой кармы:)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/{{CommentID}}/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"{{CommentID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Удаление комментария",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru",
+								"type": "text"
+							},
+							{
+								"key": "X-csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/{{CommentID}}/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"{{CommentID}}",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Восстановление удаленного комментария",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Referer",
+								"value": "https://journal.tinkoff.ru",
+								"type": "text"
+							},
+							{
+								"key": "X-csrftoken",
+								"value": "{{Csrf_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://social.journal.tinkoff.ru/api/v20/comments/{{CommentID}}/restore/",
+							"protocol": "https",
+							"host": [
+								"social",
+								"journal",
+								"tinkoff",
+								"ru"
+							],
+							"path": [
+								"api",
+								"v20",
+								"comments",
+								"{{CommentID}}",
+								"restore",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Эндпоинты для работы с комментариями к публикачиям и комментариям."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Mail",
+			"value": "hehawen316@tenjb.com",
+			"type": "string"
+		},
+		{
+			"key": "ArticleUUID",
+			"value": "dfe9d07d-5f53-4d06-8d25-0e7332955976",
+			"type": "string"
+		},
+		{
+			"key": "Csrf_token",
+			"value": ""
+		},
+		{
+			"key": "CommentID",
+			"value": "1551483",
+			"type": "string"
+		},
+		{
+			"key": "PhoneNumber",
+			"value": "79999999999",
+			"type": "string"
+		},
+		{
+			"key": "UserID",
+			"value": "2703800"
+		},
+		{
+			"key": "SessionID",
+			"value": ""
+		}
+	]
+}
